@@ -1,4 +1,4 @@
-import { Schema, model, connect, Model, Types } from 'mongoose'
+import { Model, Types } from 'mongoose'
 
 export type TGuardian = {
   fatherName: string
@@ -25,7 +25,7 @@ export type TStudent = {
   password: string
   name: TUserName
   gender: 'male' | 'female'
-  dateOfBirth?: string
+  dateOfBirth?: Date
   contactNumber: string
   emergencyContactNumber: string
   email: string
@@ -36,7 +36,7 @@ export type TStudent = {
   guardian: TGuardian
   localGuardian: TLocalGuardian
   profileImage?: string
-  isDeleted: boolean
+  admissionSemester: Types.ObjectId
 }
 
 // for creating static methods

@@ -60,7 +60,7 @@ const studentSchema = new Schema<TStudent, StudentModel>({
     required: true,
     enum: ['male', 'female'],
   },
-  dateOfBirth: { type: String },
+  dateOfBirth: { type: Date },
   email: { type: String, required: true },
   contactNumber: { type: String, required: true },
   emergencyContactNumber: { type: String, required: true },
@@ -79,10 +79,9 @@ const studentSchema = new Schema<TStudent, StudentModel>({
     required: true,
   },
   profileImage: { type: String },
-
-  isDeleted: {
-    type: Boolean,
-    default: false,
+  admissionSemester: {
+    type: Schema.Types.ObjectId,
+    ref: 'AcademicSemester',
   },
 })
 // query middleware
