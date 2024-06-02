@@ -2,7 +2,7 @@ import {
   TAcademicSemesterCode,
   TAcademicSemesterName,
   TAcademicSemesterNameCodeMapper,
-  TMonthS,
+  TMonths,
 } from './academicSemester.interface'
 
 export const AcademicSemesterName: TAcademicSemesterName[] = [
@@ -12,7 +12,7 @@ export const AcademicSemesterName: TAcademicSemesterName[] = [
 ]
 export const AcademicSemesterCode: TAcademicSemesterCode[] = ['01', '02', '03']
 // array of Month
-export const Months: TMonthS[] = [
+export const Months: TMonths[] = [
   'January',
   'February',
   'March',
