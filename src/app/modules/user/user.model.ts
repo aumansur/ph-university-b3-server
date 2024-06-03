@@ -42,7 +42,7 @@ userSchema.pre('save', async function (next) {
   // hashing password and save into DB
   user.password = await bcrypt.hash(
     user.password,
-    Number(config.bcrypt_salt_rounds),
+    Number(config.bcrypt_salt_round),
   )
   next()
 })

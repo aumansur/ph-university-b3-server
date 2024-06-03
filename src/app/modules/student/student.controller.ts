@@ -6,12 +6,13 @@ import { StudentServices } from './student.service'
 
 const getSingleStudent = catchAsync(async (req, res) => {
   const { studentId } = req.params
+
   const result = await StudentServices.getSingleStudentFromDB(studentId)
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: 'Student is retrieved succesfully',
+    message: 'Student is retrieved successfully',
     data: result,
   })
 })
@@ -22,7 +23,7 @@ const getAllStudents: RequestHandler = catchAsync(async (req, res) => {
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: 'Student are retrieved succesfully',
+    message: 'Student are retrieved successfully',
     data: result,
   })
 })

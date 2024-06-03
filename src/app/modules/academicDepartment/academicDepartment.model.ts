@@ -1,4 +1,4 @@
-import { Schema, Types, model } from 'mongoose'
+import { Schema, model } from 'mongoose'
 import { TAcademicDepartment } from './academicDepartment.interface'
 import AppError from '../../errors/AppError'
 import httpStatus from 'http-status'
@@ -24,6 +24,7 @@ academicDepartmentSchema.pre('findOneAndUpdate', async function (next) {
   if (!isDepartmentExist) {
     throw new AppError(httpStatus.NOT_FOUND, `this ${query} dose not  exists`)
   }
+  next()
 })
 export const AcademicDepartment = model<TAcademicDepartment>(
   'AcademicDepartment',

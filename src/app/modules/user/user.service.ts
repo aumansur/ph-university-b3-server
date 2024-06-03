@@ -3,17 +3,18 @@ import mongoose from 'mongoose'
 import config from '../../config'
 import AppError from '../../errors/AppError'
 import { TStudent } from '../student/student.interface'
-import { Student } from '../student/student.model'
+
 import { AcademicSemester } from './../academicSemester/academicSemester.model'
 import { TUser } from './user.interface'
 import { User } from './user.model'
 import { generateStudentId } from './user.utils'
+import { Student } from '../student/student.model'
 
 const createStudentIntoDB = async (password: string, payload: TStudent) => {
   // create a user object
   const userData: Partial<TUser> = {}
 
-  //if password is not given , use deafult password
+  //if password is not given , use default password
   userData.password = password || (config.default_pass as string)
 
   //set student role
@@ -38,7 +39,7 @@ const createStudentIntoDB = async (password: string, payload: TStudent) => {
     const newUser = await User.create([userData], { session }) // array
 
     //create a student
-    if (!newUser.length) {
+    if (!newUser) {
       throw new AppError(httpStatus.BAD_REQUEST, 'Failed to create user')
     }
     // set id , _id as user
@@ -47,9 +48,9 @@ const createStudentIntoDB = async (password: string, payload: TStudent) => {
 
     // create a student (transaction-2)
 
-    const newStudent = await Student.create([payload], { session })
+    const newStudent = await Student.create([payload], { session }) // array
 
-    if (!newStudent.length) {
+    if (!newStudent) {
       throw new AppError(httpStatus.BAD_REQUEST, 'Failed to create student')
     }
 
@@ -60,10 +61,9 @@ const createStudentIntoDB = async (password: string, payload: TStudent) => {
   } catch (err) {
     await session.abortTransaction()
     await session.endSession()
-    throw new Error('Failed to create student')
+    throw new AppError(httpStatus.BAD_REQUEST, 'Failed to create student')
   }
 }
-
 export const UserServices = {
   createStudentIntoDB,
 }
