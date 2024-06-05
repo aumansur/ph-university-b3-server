@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import httpStatus from 'http-status'
 import mongoose from 'mongoose'
 import AppError from '../../errors/AppError'
@@ -5,8 +6,26 @@ import { User } from '../user/user.model'
 import { TStudent } from './student.interface'
 import { Student } from './student.model'
 
-const getAllStudentsFromDB = async () => {
-  const result = await Student.find()
+const getAllStudentsFromDB = async (query: Record<string, unknown>) => {
+  const queryObj = { ...query } // copy
+
+  const studentSearchableFiled = ['email', 'name.firstName', 'presetAddress']
+  let searchTerm = ''
+  if (query?.searchTerm) {
+    searchTerm = query?.searchTerm as string
+  }
+  const searchQuery = Student.find({
+    $or: studentSearchableFiled.map(filed => ({
+      [filed]: { $regex: searchTerm, $options: 'i' },
+    })),
+  })
+  // filtering
+  const excludeFields = ['searchTerm', 'sort', 'limit', 'page', 'fields']
+  excludeFields.forEach(el => delete queryObj[el])
+  console.log({ query }, { queryObj })
+
+  const filterQuery = searchQuery
+    .find(queryObj)
     .populate('admissionSemester')
     .populate({
       path: 'academicDepartment',
@@ -15,7 +34,40 @@ const getAllStudentsFromDB = async () => {
       },
     })
 
-  return result
+  let sort = '-createdAt' // SET DEFAULT VALUE
+
+  // IF sort  IS GIVEN SET IT
+
+  if (query.sort) {
+    sort = query.sort as string
+  }
+
+  const sortQuery = filterQuery.sort(sort)
+
+  let limit = 1
+  let page = 1
+  let skip = 0
+
+  if (query.limit) {
+    limit = Number(query.limit)
+  }
+  if (query.page) {
+    page = Number(query.page)
+    skip = (page - 1) * limit
+  }
+  const paginateQuery = sortQuery.skip(skip)
+
+  const limitQuery = paginateQuery.limit(limit)
+  // field limit
+  let fields = '-__V'
+  if (query.fields) {
+    fields = (query.fields as string).split(',').join(' ')
+    console.log({ fields })
+  }
+
+  const fieldQuery = await limitQuery.select(fields)
+
+  return fieldQuery
 }
 
 const getSingleStudentFromDB = async (id: string) => {
@@ -94,10 +146,10 @@ const deleteStudentFromDB = async (id: string) => {
     await session.endSession()
 
     return deletedStudent
-  } catch (err) {
+  } catch (err: any) {
     await session.abortTransaction()
     await session.endSession()
-    throw new Error('Failed to delete student')
+    throw new Error(err)
   }
 }
 

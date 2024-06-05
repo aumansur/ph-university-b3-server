@@ -1,4 +1,4 @@
-import express, { Router } from 'express'
+import { Router } from 'express'
 import validateRequest from '../../middlewares/validetRequest'
 import { DepartmentValidation } from './academicDepartment.validation'
 import { AcademicDepartmentControllers } from './academicDepartment.controller'
@@ -6,9 +6,9 @@ import { AcademicDepartmentControllers } from './academicDepartment.controller'
 const router = Router()
 router.post(
   '/create-academic-department',
-  validateRequest(
-    DepartmentValidation.createAcademicDepartmentSchemaValidationZod,
-  ),
+  // validateRequest(
+  //   DepartmentValidation.createAcademicDepartmentSchemaValidationZod,
+  // ),
   AcademicDepartmentControllers.createAcademicDepartment,
 )
 

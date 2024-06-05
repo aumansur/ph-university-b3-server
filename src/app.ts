@@ -14,12 +14,10 @@ app.use(cors())
 // http://localhost:5000/api/v1/students/create-student
 // application routes
 app.use('/api/v1/', router)
-
-app.get('/', (req: Request, res: Response) => {
+const test = async (req: Request, res: Response) => {
   res.send('Welcome to the server!')
-})
-
-app.use(globalErrorHandlers)
+}
+app.get('/', test), app.use(globalErrorHandlers)
 // not found
 app.use(notFound)
 
