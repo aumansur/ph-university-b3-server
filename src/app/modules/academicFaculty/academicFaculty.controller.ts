@@ -13,7 +13,7 @@ const createAcademicFaculty: RequestHandler = catchAsync(async (req, res) => {
   sendResponse(res, {
     statusCode: statusCode.OK,
     success: true,
-    message: 'Academic semester is  created successfully',
+    message: 'Academic faculty is  created successfully',
     data: result,
   })
 })
