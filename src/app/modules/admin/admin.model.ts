@@ -1,6 +1,7 @@
 import { Schema, model } from 'mongoose'
-import { BloodGroup, Gender } from './admin.constant'
+
 import { AdminModel, TAdmin, TUserName } from './admin.interface'
+import { BloodGroup, Gender } from './admin.constant'
 
 const userNameSchema = new Schema<TUserName>({
   firstName: {
@@ -61,7 +62,7 @@ const adminSchema = new Schema<TAdmin, AdminModel>(
       type: String,
       required: [true, 'Emergency contact number is required'],
     },
-    bloogGroup: {
+    bloodGroup: {
       type: String,
       enum: {
         values: BloodGroup,
