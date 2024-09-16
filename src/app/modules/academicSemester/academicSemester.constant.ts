@@ -26,6 +26,7 @@ export const Months: TMonths[] = [
   'November',
   'December',
 ]
+export const AcademicSemesterSearchableFields = ['name', 'year']
 
 export const academicSemesterNameCodeMapper: TAcademicSemesterNameCodeMapper = {
   Autumn: '01',

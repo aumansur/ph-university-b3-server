@@ -1,10 +1,11 @@
 import { RequestHandler } from 'express'
 
-import sendResponse from '../../utils/sendResponse'
 import statusCode from 'http-status'
 import catchAsync from '../../utils/catchAsync'
 
 import { AcademicSemesterServices } from './academicSemester.service'
+import httpStatus from 'http-status'
+import sendResponse from '../../utils/sendResponse'
 
 const createAcademicSemester: RequestHandler = catchAsync(async (req, res) => {
   const result = await AcademicSemesterServices.createAcademicSemesterIntoDB(
@@ -19,15 +20,19 @@ const createAcademicSemester: RequestHandler = catchAsync(async (req, res) => {
   })
 })
 const getAllAcademicSemesters: RequestHandler = catchAsync(async (req, res) => {
-  const result = await AcademicSemesterServices.getAllAcademicSemestersFromDB()
-
+  const result = await AcademicSemesterServices.getAllAcademicSemestersFromDB(
+    req.query,
+  )
+  console.log(result)
   sendResponse(res, {
-    statusCode: statusCode.OK,
+    statusCode: httpStatus.OK,
     success: true,
     message: 'Academic semesters are retrieved successfully',
-    data: result,
+    meta: result.meta,
+    data: result.result,
   })
 })
+
 const getSingleAcademicSemester: RequestHandler = catchAsync(
   async (req, res) => {
     const { semesterId } = req.params

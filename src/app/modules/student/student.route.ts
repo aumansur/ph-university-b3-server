@@ -3,13 +3,19 @@ import express from 'express'
 import { StudentControllers } from './student.controller'
 import validateRequest from '../../middlewares/validetRequest'
 import { studentValidations } from './student.validation.zod'
+import auth from '../../middlewares/auth'
 
 const router = express.Router()
 
-router.get('/:id', StudentControllers.getSingleStudent)
+router.get(
+  '/:id',
+  auth('admin', 'faculty', 'student'),
+  StudentControllers.getSingleStudent,
+)
 
 router.patch(
   '/:id',
+  auth('admin', 'faculty', 'student'),
   validateRequest(studentValidations.updateStudentValidationSchema),
   StudentControllers.updateStudent,
 )
